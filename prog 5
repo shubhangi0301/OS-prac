@@ -1,35 +1,30 @@
-#include <fcntl.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-
-int main(int argc, char **argv)
+#include<stdio.h>
+#include<unistd.h>
+#include<stdlib.h>
+#include<sys/stat.h>
+#include<fcntl.h>
+void typefile(char * filename)
 {
-  if (argc < 3)
+ int fd,nread;
+ char buf[1024];
+ fd=open(filename,O_RDONLY);
+ if(fd==-1)
+ {
+  printf("Error occurred in opening file\n");
+  return;
+ }
+ while((nread=read(fd,buf,sizeof(buf)))>0)
+ {
+  write(1,buf,nread);
+  close(fd);
+ }
+}
+int main(int argc ,char* argv[])
+{
+  int argno;
+  for(argno=1;argno<argc;argno)
   {
-    fprintf(stderr, "Usage: ./main <src> <dest>\n");
-    return -1;
+   typefile(argv[argno]);
+   exit(0);
   }
-  char buf;
-  ssize_t bytes;
-  int fdSrc, fdDest;
-  mode_t wrMode = 0777;
-  if ((fdSrc = open(argv[1], O_RDONLY)) < 0)
-  {
-    fprintf(stderr, "Could not read %s\n", argv[1]);
-    return 2;
-  }
-  if ((fdDest = open(argv[2], O_WRONLY | O_CREAT | O_TRUNC, wrMode)) < 0)
-  {
-    fprintf(stderr, "Could not write to %s\n", argv[2]);
-    return 2;
-  }
-  while ((bytes = read(fdSrc, &buf, 1)) > 0)
-    write(fdDest, &buf, 1);
-  if (bytes < 0)
-  {
-    fprintf(stderr, "Could not read contents of %s\n", argv[1]);
-    return 2;
-  }
-  if (bytes == 0)
-    write(fdDest, "\n", 1);
+}

@@ -1,0 +1,51 @@
+#include <iostream>
+using namespace std;
+int main()
+{   int n,at[30],bt[30],bt1[30],wt[30],tat[30],pt[30];
+    float atat=0.0,awt=0.0;
+    cout<<"enter no. of process"<<endl;
+    cin>>n;
+    for(int i=0;i<n;i++)
+    {
+        cout<<"Enter burst time of process "<<i+1<<endl;
+        cin>>bt[i];
+        cout<<"Enter arrival time of process "<<i+1<<endl;
+        cin>>at[i];
+        cout<<"Enter priority of process "<<i+1<<endl;
+        cin>>pt[i];
+    }
+    for(int i=0;i<n;i++)
+    {
+        bt1[i]=bt[i];
+    }
+    int count=0,time=0,highest,end;
+    bt[10]=0;
+    while(count!=n)
+    {   
+        highest=10;
+        for(int i=0;i<n;i++)
+        {
+            if(at[i]<=time && pt[i]>pt[highest] && bt[i]>0)
+            {
+                highest=i;
+            }
+        }
+        bt[highest]--;
+        if(bt[highest]==0)
+        {   count++;
+            end=time+1;
+            wt[highest]=end-bt1[highest]-at[highest];
+            tat[highest]=end-at[highest];
+        }
+        time++;
+    }
+    for(int i=0;i<n;i++)
+    {
+    cout<<"Process "<<i+1<<" : burst time = "<<bt1[i]<<" arrival time = "<<at[i]<<" waiting time = "<<wt[i]<<"  turnaround time = "<<tat[i]<<endl;
+    awt=awt+wt[i];
+    atat=atat+tat[i];
+    }
+    cout<<"Average waiting time is: "<<awt/n<<endl;
+    cout<<"Average turnaround time is: "<<atat/n<<endl;
+    return 0;
+}

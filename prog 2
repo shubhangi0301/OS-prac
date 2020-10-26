@@ -1,20 +1,14 @@
-#include <stdio.h>
-#include <stdlib.h>
+#include<stdio.h>
+#include<stdlib.h>
+#include<unistd.h>
 
-int main(void)
+int main()
 {
-  printf("Linux Kernel Version: ");
-  fflush(stdout);
-  system("awk 'NR == 1 {print $3;}' /proc/version");
-  printf("CPU Model: ");
-  fflush(stdout);
-  system("awk 'NR == 5 {$1=$2=$3=\"\\b\"; print $0;}' /proc/cpuinfo");
-  printf("CPU Frequency: ");
-  fflush(stdout);
-  system("awk 'NR == 8 {$1=$2=$3=\"\\b\"; printf $0; print \" MHz\";}' /proc/cpuinfo");
-  printf("CPU Core Count: ");
-  fflush(stdout);
-  system("grep processor /proc/cpuinfo | wc -l");
+	printf("\nKernel Version:\n");
+	system("cat /proc/sys/kernel/osrelease");		
 
-  return 0;
+	printf("\nCPU type & Model:\n");
+	system("cat /proc/cpuinfo | awk 'NR==4,NR==5 {print}'");	
+
+	return 0;
 }

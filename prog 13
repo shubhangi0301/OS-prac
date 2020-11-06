@@ -1,0 +1,193 @@
+#include <iostream>
+using namespace std;
+void first_fit()
+{
+    int np,nm,mem_part[30],proc_size[30],inf=0,exf=0;
+    cout<<"Enter number of memory position space"<<endl;
+    cin>>nm;
+    cout<<"Enter no. of process"<<endl;
+    cin>>np;
+    for(int i=0;i<nm;i++)
+    {
+        cout<<"Enter size of memory partition "<<i+1<<": "<<endl;
+        cin>>mem_part[i];
+    }
+    for(int i=0;i<np;i++)
+    {
+        cout<<"Enter size of process: "<<i+1<<endl;
+        cin>>proc_size[i];
+    }
+    int flag[np]={0};
+    for(int i=0;i<np;i++)
+    {
+        for(int j=0;j<nm;j++)
+        {
+            if(proc_size[i]<=mem_part[j])
+            {   cout<<"Process of size "<<proc_size[i]<<" mapped to "<<mem_part[j]<<endl;
+                inf=inf+mem_part[j]-proc_size[i];
+                mem_part[j]=0;
+                flag[i]=1;
+                break;
+            }
+        }
+        if(flag[i]==0)
+        {
+            cout<<"There is no memory partition available for process having size "<<proc_size[i]<<endl;
+        }
+    }
+    for(int i=0;i<nm;i++)
+    {
+        if(mem_part[i]!=0)
+        {
+            exf=exf+mem_part[i];
+        }
+    }
+    cout<<"Internal fragmentation is: "<<inf<<endl;
+    cout<<"External fragmentation is: "<<exf<<endl;
+}
+void best_fit()
+{
+    int np,nm,mem_part[30],proc_size[30],inf=0,exf=0;
+    cout<<"Enter number of memory position space"<<endl;
+    cin>>nm;
+    cout<<"Enter no. of process"<<endl;
+    cin>>np;
+    for(int i=0;i<nm;i++)
+    {
+        cout<<"Enter size of memory partition "<<i+1<<": "<<endl;
+        cin>>mem_part[i];
+    }
+    for(int i=0;i<np;i++)
+    {
+        cout<<"Enter size of process: "<<i+1<<endl;
+        cin>>proc_size[i];
+    }
+    int temp=0;
+    for(int i=0;i<nm;i++)
+    {
+    for(int j=i+1;j<nm;j++)
+    {
+      if(mem_part[j]<mem_part[i]) 
+      {
+         temp=mem_part[i];
+         mem_part[i]=mem_part[j];
+         mem_part[j]=temp;
+      }
+    }
+    }
+    int flag[np]={0};
+    for(int i=0;i<np;i++)
+    {
+        for(int j=0;j<nm;j++)
+        {
+            if(proc_size[i]<=mem_part[j])
+            {   cout<<"Process of size "<<proc_size[i]<<" mapped to "<<mem_part[j]<<endl;
+                inf=inf+mem_part[j]-proc_size[i];
+                mem_part[j]=0;
+                flag[i]=1;
+                break;
+            }
+        }
+        if(flag[i]==0)
+        {
+            cout<<"There is no memory partition available for process having size "<<proc_size[i]<<endl;
+        }
+    }
+    for(int i=0;i<nm;i++)
+    {
+        if(mem_part[i]!=0)
+        {
+            exf=exf+mem_part[i];
+        }
+    }
+    cout<<"Internal fragmentation is: "<<inf<<endl;
+    cout<<"External fragmentation is: "<<exf<<endl;
+}
+void worst_fit()
+{
+    int np,nm,mem_part[30],proc_size[30],inf=0,exf=0;
+    cout<<"Enter number of memory position space"<<endl;
+    cin>>nm;
+    cout<<"Enter no. of process"<<endl;
+    cin>>np;
+    for(int i=0;i<nm;i++)
+    {
+        cout<<"Enter size of memory partition "<<i+1<<": "<<endl;
+        cin>>mem_part[i];
+    }
+    for(int i=0;i<np;i++)
+    {
+        cout<<"Enter size of process: "<<i+1<<endl;
+        cin>>proc_size[i];
+    }
+    int temp,flag1=1;
+      for(int i = 1; (i <= nm) && flag1; i++)
+     {
+          flag1 = 0;
+          for (int j=0; j < (nm -1); j++)
+         {
+               if (mem_part[j+1] > mem_part[j]) 
+              { 
+                    temp = mem_part[j];     
+                    mem_part[j] = mem_part[j+1];
+                    mem_part[j+1] = temp;
+                    flag1 = 1;  
+               }
+          }
+     } 
+    int flag[np]={0};
+    for(int i=0;i<np;i++)
+    {
+        for(int j=0;j<nm;j++)
+        {
+            if(proc_size[i]<=mem_part[j])
+            {   cout<<"Process of size "<<proc_size[i]<<" mapped to "<<mem_part[j]<<endl;
+                inf=inf+mem_part[j]-proc_size[i];
+                mem_part[j]=0;
+                flag[i]=1;
+                break;
+            }
+        }
+        if(flag[i]==0)
+        {
+            cout<<"There is no memory partition available for process having size "<<proc_size[i]<<endl;
+        }
+    }
+    for(int i=0;i<nm;i++)
+    {
+        if(mem_part[i]!=0)
+        {
+            exf=exf+mem_part[i];
+        }
+    }
+    cout<<"Internal fragmentation is: "<<inf<<endl;
+    cout<<"External fragmentation is: "<<exf<<endl;
+}
+int main()
+{   int n;
+    char ch='n';
+do{
+    cout<<"1: First fit"<<endl;
+    cout<<"2: Best fit"<<endl;
+    cout<<"3: Worst fit"<<endl;
+    cout<<"\nEnter your choice "<<endl;
+    cin>>n;
+    switch(n)
+    {
+        case 1: 
+                first_fit();
+                break;
+        case 2:
+                best_fit();
+                break;
+        case 3:
+                worst_fit();
+                break;
+        default:
+                cout<<"Invalid input"<<endl;
+    }
+    cout<<"Do you want to continue?"<<endl;
+    cin>>ch;
+}while(ch=='y'||ch=='Y');
+    return 0;
+}
